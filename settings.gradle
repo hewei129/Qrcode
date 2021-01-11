@@ -1,0 +1,3 @@
+include ':lib_qrcode'
+include ':app'
+rootProject.name = "QrcodeDemo"
