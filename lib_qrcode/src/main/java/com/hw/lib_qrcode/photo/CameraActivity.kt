@@ -302,7 +302,7 @@ open class CameraActivity : BaseScanActivity() {
 
         val outputFileOptions: ImageCapture.OutputFileOptions = ImageCapture.OutputFileOptions.Builder(contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, getContentValues()).setMetadata(metadata).build()
 
-        imageCapture!!.takePicture(outputFileOptions, cameraExecutor, object :
+        imageCapture?.takePicture(outputFileOptions, cameraExecutor, object :
             ImageCapture.OnImageSavedCallback {
                 override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                     Log.e("outputFileResults", "outputFileResults:" + outputFileResults.savedUri)
@@ -323,7 +323,7 @@ open class CameraActivity : BaseScanActivity() {
 
         val outputFileOptions: ImageCapture.OutputFileOptions = ImageCapture.OutputFileOptions.Builder(contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, getContentValues()).setMetadata(metadata).build()
 
-        imageCapture!!.takePicture(outputFileOptions, cameraExecutor, object :
+        imageCapture?.takePicture(outputFileOptions, cameraExecutor, object :
             ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 Log.e("outputFileResults", "outputFileResults:" + outputFileResults.savedUri)
