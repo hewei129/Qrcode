@@ -1,13 +1,16 @@
 package com.hw.lib_qrcode.photo
 
+import android.Manifest
 import android.app.Activity
 import android.content.ContentValues
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.media.MediaCodec.MetricsConstants.MIME_TYPE
 import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.Settings
 import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
@@ -15,6 +18,7 @@ import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.hw.lib_qrcode.R
 import com.hw.lib_qrcode.qrcode.ScanCodeModel
@@ -22,6 +26,8 @@ import com.hw.lib_qrcode.qrcode.view.BaseScanView
 import com.kevin.crop.UCrop
 import com.yxing.BaseScanActivity
 import kotlinx.android.synthetic.main.activity_camera.*
+import kotlinx.android.synthetic.main.activity_camera.pvCamera
+import kotlinx.android.synthetic.main.activity_scancode.*
 import java.io.File
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
@@ -46,11 +52,43 @@ open class CameraActivity : BaseScanActivity() {
             Uri.fromFile(File(cacheDir, "cropImage.jpeg"))
         cameraExecutor = Executors.newSingleThreadExecutor()
         //权限申请
-        // surface准备监听
-        pvCamera.post {
-            //设置需要实现的用例（预览，拍照，图片数据解析等等）
-            bindCameraUseCases()
+        //判断用户是否已经授权，未授权则向用户申请授权，已授权则直接进行呼叫操作
+        if(ContextCompat.checkSelfPermission(this,"Manifest.permission.CAMERA")
+            != PackageManager.PERMISSION_GRANTED)
+        {
+            //注意第二个参数没有双引号
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                ActivityCompat.requestPermissions(
+                    this@CameraActivity,
+                    arrayOf(Manifest.permission.CAMERA),
+                    1001
+                )
+            }
         }
+        else
+        {
+            if(ContextCompat.checkSelfPermission(this,"Manifest.permission.WRITE_EXTERNAL_STORAGE")
+                != PackageManager.PERMISSION_GRANTED)
+            {
+                //注意第二个参数没有双引号
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    ActivityCompat.requestPermissions(
+                        this@CameraActivity,
+                        arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                        1002
+                    )
+                }
+            }
+            else
+            {
+                // surface准备监听
+                pvCamera.post {
+                    //设置需要实现的用例（预览，拍照，图片数据解析等等）
+                    bindCameraUseCases()
+                }
+            }
+        }
+
     }
     protected var mOnPictureListener: OnPictureListener? = null
     protected var lensFacing: Int = CameraSelector.LENS_FACING_FRONT
@@ -154,6 +192,60 @@ open class CameraActivity : BaseScanActivity() {
 
         }, ContextCompat.getMainExecutor(this))
     }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (null != grantResults && grantResults.isNotEmpty() && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                // 判断用户是否 点击了不再提醒。(检测该权限是否还可以申请)
+                val b = shouldShowRequestPermissionRationale(permissions[0])
+                if (!b) {
+                    // 提示用户去应用设置界面手动开启权限
+                    if (requestCode == 1001 || requestCode == 1002) {
+                        val intent = Intent()
+                        intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                        val uri =
+                            Uri.fromParts("package", this.packageName, null)
+                        intent.data = uri
+                        startActivityForResult(
+                            intent,
+                            10000)
+                    }
+                } else {
+                    Toast.makeText(this, "请先开启相关权限", Toast.LENGTH_LONG).show()
+                }
+            } else {
+                if(requestCode == 1001){
+                    if(ContextCompat.checkSelfPermission(this,"Manifest.permission.WRITE_EXTERNAL_STORAGE")
+                        != PackageManager.PERMISSION_GRANTED)
+                    {
+                        //注意第二个参数没有双引号
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            ActivityCompat.requestPermissions(
+                                this@CameraActivity,
+                                arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+                                1002
+                            )
+                        }
+                    }
+                }else if (requestCode == 1002) {
+                    // surface准备监听
+                    pvCamera.post {
+                        //设置需要实现的用例（预览，拍照，图片数据解析等等）
+                        bindCameraUseCases()
+                    }
+                }
+                //                ToastUtil.showToast(appData, "权限获取成功");
+            }
+        }
+    }
+
 
     private var imageCapture: ImageCapture? = null
 
