@@ -61,7 +61,7 @@ class ScanQQView : BaseScanView {
             resources,
             R.drawable.scanqq
         )
-        bitmapHigh = scanLine!!.getHeight()
+        bitmapHigh = scanLine!!.height
         interceptiRect = Rect()
         scanRect = Rect()
         lineRect = Rect()
@@ -186,10 +186,10 @@ class ScanQQView : BaseScanView {
         if (valueAnimator == null) {
             valueAnimator =
                 ValueAnimator.ofInt(scanRect!!.top - bitmapHigh, scanRect!!.bottom - bitmapHigh)
-            valueAnimator?.setRepeatCount(ValueAnimator.INFINITE)
-            valueAnimator?.setRepeatMode(ValueAnimator.RESTART)
-            valueAnimator?.setDuration(3000)
-            valueAnimator?.setInterpolator(LinearInterpolator())
+            valueAnimator?.repeatCount = ValueAnimator.INFINITE
+            valueAnimator?.repeatMode = ValueAnimator.RESTART
+            valueAnimator?.duration = 3000
+            valueAnimator?.interpolator = LinearInterpolator()
             valueAnimator?.addUpdateListener(AnimatorUpdateListener { animation ->
                 scanLineTop = animation.animatedValue as Int
                 postInvalidate()

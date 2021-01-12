@@ -13,13 +13,15 @@ import java.util.*
 
 //用于存放解码类型分类
 class DecodeFormatManager {
-    companion object{
-        val PRODUCT_FORMATS: MutableSet<BarcodeFormat> = EnumSet.of(BarcodeFormat.UPC_A,
+    companion object {
+        val PRODUCT_FORMATS: MutableSet<BarcodeFormat> = EnumSet.of(
+            BarcodeFormat.UPC_A,
             BarcodeFormat.UPC_E,
             BarcodeFormat.EAN_13,
             BarcodeFormat.EAN_8,
             BarcodeFormat.RSS_14,
-            BarcodeFormat.RSS_EXPANDED)
+            BarcodeFormat.RSS_EXPANDED
+        )
         val INDUSTRIAL_FORMATS: Set<BarcodeFormat> = EnumSet.of(
             BarcodeFormat.CODE_39,
             BarcodeFormat.CODE_93,
@@ -34,7 +36,7 @@ class DecodeFormatManager {
         val DATA_MATRIX_FORMATS: Set<BarcodeFormat> =
             EnumSet.of(BarcodeFormat.DATA_MATRIX)
 
-        init{
+        init {
             ONE_D_FORMATS.addAll(INDUSTRIAL_FORMATS)
         }
 

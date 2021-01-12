@@ -15,19 +15,17 @@ import android.view.View
 open class BaseScanView : View {
     protected var valueAnimator: ValueAnimator? = null
 
-    constructor(context: Context?) : super(context) {}
+    constructor(context: Context?) : super(context)
     constructor(context: Context?, attrs: AttributeSet?) : super(
         context,
         attrs
-    ) {
-    }
+    )
 
     constructor(
         context: Context?,
         attrs: AttributeSet?,
         defStyleAttr: Int
-    ) : super(context, attrs, defStyleAttr) {
-    }
+    ) : super(context, attrs, defStyleAttr)
 
     open fun startAnim() {}
     open fun cancelAnim() {}

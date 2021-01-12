@@ -17,7 +17,7 @@ class RGBLuminanceSource(bitmap: Bitmap) :
     LuminanceSource(bitmap.width, bitmap.height) {
     private val luminances: ByteArray
 
-    constructor(path: String) : this(loadBitmap(path)) {}
+    constructor(path: String) : this(loadBitmap(path))
 
     override fun getRow(y: Int, row: ByteArray?): ByteArray {
         var row = row

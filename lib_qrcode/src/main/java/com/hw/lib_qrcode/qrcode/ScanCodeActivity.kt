@@ -22,7 +22,6 @@ import com.hw.lib_qrcode.qrcode.view.BaseScanView
 import com.hw.lib_qrcode.qrcode.view.ScanCustomizeView
 import com.hw.lib_qrcode.qrcode.view.ScanQQView
 import com.hw.lib_qrcode.qrcode.view.ScanWechatView
-import com.yxing.BaseScanActivity
 import kotlinx.android.synthetic.main.activity_scancode.*
 import java.io.File
 import java.lang.Math.*
@@ -33,14 +32,14 @@ import java.util.concurrent.Executors
 
 abstract class ScanCodeActivity : BaseScanActivity() {
 
-    private var lensFacing : Int = CameraSelector.LENS_FACING_BACK
-    private var camera : Camera? = null
-    private var preview : Preview? = null
-    private var imageAnalyzer : ImageAnalysis? = null
-    private lateinit var cameraExecutor : ExecutorService
-    private var baseScanView : BaseScanView? = null
-    private var rlParentContent : RelativeLayout? = null
-    private lateinit var scModel : ScanCodeModel
+    private var lensFacing: Int = CameraSelector.LENS_FACING_BACK
+    private var camera: Camera? = null
+    private var preview: Preview? = null
+    private var imageAnalyzer: ImageAnalysis? = null
+    private lateinit var cameraExecutor: ExecutorService
+    private var baseScanView: BaseScanView? = null
+    private var rlParentContent: RelativeLayout? = null
+    private lateinit var scModel: ScanCodeModel
 
     companion object {
         private const val TAG = "CameraXBasic"
@@ -51,22 +50,24 @@ abstract class ScanCodeActivity : BaseScanActivity() {
 
         /** Helper function used to create a timestamped file */
         private fun createFile(baseFolder: File, format: String, extension: String) =
-            File(baseFolder, SimpleDateFormat(format, Locale.US)
-                .format(System.currentTimeMillis()) + extension)
+            File(
+                baseFolder, SimpleDateFormat(format, Locale.US)
+                    .format(System.currentTimeMillis()) + extension
+            )
     }
 
-    override fun getLayoutId() : Int = R.layout.activity_scancode
+    override fun getLayoutId(): Int = R.layout.activity_scancode
 
     override fun initData() {
         scModel = intent?.extras?.getParcelable(ScanCodeConfig.MODEL_KEY)!!
-        addScanView(scModel.getStyle())
+        addScanView(scModel.style)
         // Initialize our background executor
         cameraExecutor = Executors.newSingleThreadExecutor()
         //权限申请
         //判断用户是否已经授权，未授权则向用户申请授权，已授权则直接进行呼叫操作
-        if(ContextCompat.checkSelfPermission(this,"Manifest.permission.CAMERA")
-            != PackageManager.PERMISSION_GRANTED)
-        {
+        if (ContextCompat.checkSelfPermission(this, "Manifest.permission.CAMERA")
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             //注意第二个参数没有双引号
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(
@@ -75,9 +76,7 @@ abstract class ScanCodeActivity : BaseScanActivity() {
                     1001
                 )
             }
-        }
-        else
-        {
+        } else {
             // surface准备监听
             pvCamera.post {
                 //设置需要实现的用例（预览，拍照，图片数据解析等等）
@@ -108,7 +107,8 @@ abstract class ScanCodeActivity : BaseScanActivity() {
                         intent.data = uri
                         startActivityForResult(
                             intent,
-                           10000)
+                            10000
+                        )
                     }
                 } else {
                     Toast.makeText(this, "请先开启相关权限", Toast.LENGTH_LONG).show()
@@ -132,8 +132,11 @@ abstract class ScanCodeActivity : BaseScanActivity() {
 
     private fun addScanView(style: Int?) {
         rlParentContent = findViewById(R.id.rlparent)
-        val lp : RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT)
-        when (style){
+        val lp: RelativeLayout.LayoutParams = RelativeLayout.LayoutParams(
+            RelativeLayout.LayoutParams.MATCH_PARENT,
+            RelativeLayout.LayoutParams.MATCH_PARENT
+        )
+        when (style) {
             ScanStyle.QQ -> {
                 baseScanView = ScanQQView(this)
             }
@@ -190,12 +193,15 @@ abstract class ScanCodeActivity : BaseScanActivity() {
                 .setTargetRotation(rotation)
                 .build()
                 .apply {
-                    setAnalyzer(cameraExecutor, ScanCodeAnalyzer(this@ScanCodeActivity, scModel, object :
-                        OnScancodeListenner {
-                        override fun onBackCode(code: String) {
-                            success(code)
-                        }
-                    }))
+                    setAnalyzer(
+                        cameraExecutor,
+                        ScanCodeAnalyzer(this@ScanCodeActivity, scModel, object :
+                            OnScancodeListenner {
+                            override fun onBackCode(code: String) {
+                                success(code)
+                            }
+                        })
+                    )
                 }
 
             // 必须在重新绑定用例之前取消之前绑定
@@ -203,7 +209,8 @@ abstract class ScanCodeActivity : BaseScanActivity() {
             try {
                 //获取相机实例
                 camera = cameraProvider.bindToLifecycle(
-                    this, cameraSelector, preview, imageAnalyzer)
+                    this, cameraSelector, preview, imageAnalyzer
+                )
 
                 //设置预览的view
                 preview?.setSurfaceProvider(pvCamera.surfaceProvider)

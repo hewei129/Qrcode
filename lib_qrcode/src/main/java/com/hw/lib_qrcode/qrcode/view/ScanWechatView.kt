@@ -1,7 +1,6 @@
 package com.hw.lib_qrcode.qrcode.view
 
 import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet

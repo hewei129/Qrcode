@@ -21,13 +21,11 @@ import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.hw.lib_qrcode.R
+import com.hw.lib_qrcode.qrcode.BaseScanActivity
 import com.hw.lib_qrcode.qrcode.ScanCodeModel
 import com.hw.lib_qrcode.qrcode.view.BaseScanView
 import com.kevin.crop.UCrop
-import com.yxing.BaseScanActivity
 import kotlinx.android.synthetic.main.activity_camera.*
-import kotlinx.android.synthetic.main.activity_camera.pvCamera
-import kotlinx.android.synthetic.main.activity_scancode.*
 import java.io.File
 import java.nio.ByteBuffer
 import java.text.SimpleDateFormat
@@ -53,9 +51,9 @@ open class CameraActivity : BaseScanActivity() {
         cameraExecutor = Executors.newSingleThreadExecutor()
         //权限申请
         //判断用户是否已经授权，未授权则向用户申请授权，已授权则直接进行呼叫操作
-        if(ContextCompat.checkSelfPermission(this,"Manifest.permission.CAMERA")
-            != PackageManager.PERMISSION_GRANTED)
-        {
+        if (ContextCompat.checkSelfPermission(this, "Manifest.permission.CAMERA")
+            != PackageManager.PERMISSION_GRANTED
+        ) {
             //注意第二个参数没有双引号
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 ActivityCompat.requestPermissions(
@@ -64,12 +62,13 @@ open class CameraActivity : BaseScanActivity() {
                     1001
                 )
             }
-        }
-        else
-        {
-            if(ContextCompat.checkSelfPermission(this,"Manifest.permission.WRITE_EXTERNAL_STORAGE")
-                != PackageManager.PERMISSION_GRANTED)
-            {
+        } else {
+            if (ContextCompat.checkSelfPermission(
+                    this,
+                    "Manifest.permission.WRITE_EXTERNAL_STORAGE"
+                )
+                != PackageManager.PERMISSION_GRANTED
+            ) {
                 //注意第二个参数没有双引号
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     ActivityCompat.requestPermissions(
@@ -78,9 +77,7 @@ open class CameraActivity : BaseScanActivity() {
                         1002
                     )
                 }
-            }
-            else
-            {
+            } else {
                 // surface准备监听
                 pvCamera.post {
                     //设置需要实现的用例（预览，拍照，图片数据解析等等）
@@ -90,6 +87,7 @@ open class CameraActivity : BaseScanActivity() {
         }
 
     }
+
     protected var mOnPictureListener: OnPictureListener? = null
     protected var lensFacing: Int = CameraSelector.LENS_FACING_FRONT
     private var camera: Camera? = null
@@ -100,9 +98,10 @@ open class CameraActivity : BaseScanActivity() {
     private var rlParentContent: RelativeLayout? = null
     private lateinit var scModel: ScanCodeModel
 
-    fun setCameraFacing(facing: Int){
+    fun setCameraFacing(facing: Int) {
         lensFacing = facing
     }
+
     companion object {
         private const val TAG = "CameraXBasic"
         private const val FILENAME = "yyyy-MM-dd-HH-mm-ss-SSS"
@@ -117,7 +116,6 @@ open class CameraActivity : BaseScanActivity() {
                     .format(System.currentTimeMillis()) + extension
             )
     }
-
 
 
     /*切换闪光灯*/
@@ -158,12 +156,13 @@ open class CameraActivity : BaseScanActivity() {
                 .build()
             //拍摄图像的配置
 
-            imageCapture = ImageCapture.Builder() //CAPTURE_MODE_MAXIMIZE_QUALITY 拍摄高质量图片，图像质量优先于延迟，可能需要更长的时间
-                //CAPTURE_MODE_MINIMIZE_LATENCY
-                .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
-                .setTargetAspectRatio(screenAspectRatio) //设置宽高比
-                .setTargetRotation(rotation) // 设置旋转角度
-                .build()
+            imageCapture =
+                ImageCapture.Builder() //CAPTURE_MODE_MAXIMIZE_QUALITY 拍摄高质量图片，图像质量优先于延迟，可能需要更长的时间
+                    //CAPTURE_MODE_MINIMIZE_LATENCY
+                    .setCaptureMode(ImageCapture.CAPTURE_MODE_MAXIMIZE_QUALITY)
+                    .setTargetAspectRatio(screenAspectRatio) //设置宽高比
+                    .setTargetRotation(rotation) // 设置旋转角度
+                    .build()
             // 图像分析用例
             imageAnalyzer = ImageAnalysis.Builder()
                 .setTargetResolution(size)
@@ -215,16 +214,20 @@ open class CameraActivity : BaseScanActivity() {
                         intent.data = uri
                         startActivityForResult(
                             intent,
-                            10000)
+                            10000
+                        )
                     }
                 } else {
                     Toast.makeText(this, "请先开启相关权限", Toast.LENGTH_LONG).show()
                 }
             } else {
-                if(requestCode == 1001){
-                    if(ContextCompat.checkSelfPermission(this,"Manifest.permission.WRITE_EXTERNAL_STORAGE")
-                        != PackageManager.PERMISSION_GRANTED)
-                    {
+                if (requestCode == 1001) {
+                    if (ContextCompat.checkSelfPermission(
+                            this,
+                            "Manifest.permission.WRITE_EXTERNAL_STORAGE"
+                        )
+                        != PackageManager.PERMISSION_GRANTED
+                    ) {
                         //注意第二个参数没有双引号
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                             ActivityCompat.requestPermissions(
@@ -234,7 +237,7 @@ open class CameraActivity : BaseScanActivity() {
                             )
                         }
                     }
-                }else if (requestCode == 1002) {
+                } else if (requestCode == 1002) {
                     // surface准备监听
                     pvCamera.post {
                         //设置需要实现的用例（预览，拍照，图片数据解析等等）
@@ -277,7 +280,8 @@ open class CameraActivity : BaseScanActivity() {
             val currentTimestamp = System.currentTimeMillis()
             // 计算平均流明的频率不超过每秒一次
             if (currentTimestamp - lastAnalyzedTimestamp >=
-                TimeUnit.SECONDS.toMillis(1)) {
+                TimeUnit.SECONDS.toMillis(1)
+            ) {
                 val buffer = image.planes[0].buffer
                 // 从回调对象中提取图像数据
                 val data = buffer.toByteArray()
@@ -292,42 +296,54 @@ open class CameraActivity : BaseScanActivity() {
             }
         }
     }
+
     /**
      * 拍照按钮点击监听
      */
-    protected fun takePhoto(){
-
-        val metadata = ImageCapture.Metadata()
-            metadata.isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
-
-        val outputFileOptions: ImageCapture.OutputFileOptions = ImageCapture.OutputFileOptions.Builder(contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, getContentValues()).setMetadata(metadata).build()
-
-        imageCapture?.takePicture(outputFileOptions, cameraExecutor, object :
-            ImageCapture.OnImageSavedCallback {
-                override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                    Log.e("outputFileResults", "outputFileResults:" + outputFileResults.savedUri)
-                    outputFileResults.savedUri?.let { startCropActivity(it) }
-//                    mOnPictureListener?.onPicture(outputFileResults.savedUri)
-                }
-
-                override fun onError(exception: ImageCaptureException) {
-                    Log.e("outputFileResults", "exception:" + exception.localizedMessage)
-                }
-             })
-
-    }
-    protected fun takePhoto(isNeedCrop: Boolean){
+    protected fun takePhoto() {
 
         val metadata = ImageCapture.Metadata()
         metadata.isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
 
-        val outputFileOptions: ImageCapture.OutputFileOptions = ImageCapture.OutputFileOptions.Builder(contentResolver, MediaStore.Images.Media.EXTERNAL_CONTENT_URI, getContentValues()).setMetadata(metadata).build()
+        val outputFileOptions: ImageCapture.OutputFileOptions =
+            ImageCapture.OutputFileOptions.Builder(
+                contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                getContentValues()
+            ).setMetadata(metadata).build()
 
         imageCapture?.takePicture(outputFileOptions, cameraExecutor, object :
             ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 Log.e("outputFileResults", "outputFileResults:" + outputFileResults.savedUri)
-                if(isNeedCrop)
+                outputFileResults.savedUri?.let { startCropActivity(it) }
+//                    mOnPictureListener?.onPicture(outputFileResults.savedUri)
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                Log.e("outputFileResults", "exception:" + exception.localizedMessage)
+            }
+        })
+
+    }
+
+    protected fun takePhoto(isNeedCrop: Boolean) {
+
+        val metadata = ImageCapture.Metadata()
+        metadata.isReversedHorizontal = lensFacing == CameraSelector.LENS_FACING_FRONT
+
+        val outputFileOptions: ImageCapture.OutputFileOptions =
+            ImageCapture.OutputFileOptions.Builder(
+                contentResolver,
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                getContentValues()
+            ).setMetadata(metadata).build()
+
+        imageCapture?.takePicture(outputFileOptions, cameraExecutor, object :
+            ImageCapture.OnImageSavedCallback {
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                Log.e("outputFileResults", "outputFileResults:" + outputFileResults.savedUri)
+                if (isNeedCrop)
                     outputFileResults.savedUri?.let { startCropActivity(it) }
                 else
                     mOnPictureListener?.onPicture(outputFileResults.savedUri)
@@ -342,6 +358,7 @@ open class CameraActivity : BaseScanActivity() {
 
     // 剪切后图像文件
     var mDestinationUri: Uri? = null
+
     /**
      * 裁剪图片方法实现
      *
@@ -370,11 +387,12 @@ open class CameraActivity : BaseScanActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK) {
-            if(requestCode == UCrop.REQUEST_CROP){
+            if (requestCode == UCrop.REQUEST_CROP) {
                 handleCropResult(data)
             }
         }
     }
+
     /**
      * 处理剪切成功的返回值
      *
@@ -420,44 +438,51 @@ open class CameraActivity : BaseScanActivity() {
 //    }
 
     /**
-    * 使用ContentValues存储图片输出信息
-    */
-private fun getContentValues(): ContentValues {
-    // 创建拍照后输出的图片文件名
-    val fileName = SimpleDateFormat("yyyy-MM-dd-HH-mm-ss-SSS", Locale.US).format(System.currentTimeMillis()) + ".jpg"
-    return ContentValues().apply {
-        put(MediaStore.MediaColumns.MIME_TYPE, MIME_TYPE)
-        // 适配Android Q版本
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
-            put(MediaStore.Images.Media.MIME_TYPE, "image/*")
-            put(
-                MediaStore.Images.Media.RELATIVE_PATH,
-                Environment.DIRECTORY_PICTURES + "/"
-            )
-        } else {
-            val fileDir = File(Environment.getExternalStorageDirectory(), Environment.DIRECTORY_PICTURES).also { if (!it.exists()) it.mkdir() }
-            val filePath = fileDir.absolutePath + File.separator + fileName
-            put(MediaStore.Images.Media.DATA, filePath)
+     * 使用ContentValues存储图片输出信息
+     */
+    private fun getContentValues(): ContentValues {
+        // 创建拍照后输出的图片文件名
+        val fileName = SimpleDateFormat(
+            "yyyy-MM-dd-HH-mm-ss-SSS",
+            Locale.US
+        ).format(System.currentTimeMillis()) + ".jpg"
+        return ContentValues().apply {
+            put(MediaStore.MediaColumns.MIME_TYPE, MIME_TYPE)
+            // 适配Android Q版本
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                put(MediaStore.Images.Media.DISPLAY_NAME, fileName)
+                put(MediaStore.Images.Media.MIME_TYPE, "image/*")
+                put(
+                    MediaStore.Images.Media.RELATIVE_PATH,
+                    Environment.DIRECTORY_PICTURES + "/"
+                )
+            } else {
+                val fileDir = File(
+                    Environment.getExternalStorageDirectory(),
+                    Environment.DIRECTORY_PICTURES
+                ).also { if (!it.exists()) it.mkdir() }
+                val filePath = fileDir.absolutePath + File.separator + fileName
+                put(MediaStore.Images.Media.DATA, filePath)
+            }
         }
     }
-}
-override fun onDestroy() {
-    super.onDestroy()
-    cameraExecutor.shutdown()
-    baseScanView?.cancelAnim()
-}
 
-/**
-* 图片选择的回调接口
-*/
-interface OnPictureListener {
+    override fun onDestroy() {
+        super.onDestroy()
+        cameraExecutor.shutdown()
+        baseScanView?.cancelAnim()
+    }
+
     /**
-     * 图片选择的监听回调
-     *
-     * @param url
+     * 图片选择的回调接口
      */
-    fun onPicture(uri: Uri?)
+    interface OnPictureListener {
+        /**
+         * 图片选择的监听回调
+         *
+         * @param url
+         */
+        fun onPicture(uri: Uri?)
     }
 
 }

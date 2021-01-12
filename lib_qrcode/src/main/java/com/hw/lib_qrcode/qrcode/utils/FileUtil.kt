@@ -11,7 +11,6 @@ import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import java.io.File
 import java.io.FileOutputStream
-import java.util.*
 import kotlin.random.Random.Default.nextInt
 
 
@@ -23,7 +22,7 @@ import kotlin.random.Random.Default.nextInt
  */
 
 fun getRealPathFromURI(context: Context, contentUri: Uri?): File? {
-    var file : File ?= null
+    var file: File? = null
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
         if (contentUri?.scheme == ContentResolver.SCHEME_FILE)
             file = File(requireNotNull(contentUri.path))
@@ -51,10 +50,11 @@ fun getRealPathFromURI(context: Context, contentUri: Uri?): File? {
                     }
             }
         }
-    }else{
+    } else {
         var res: String? = null
         val proj = arrayOf<String>(MediaStore.Images.Media.DATA)
-        val cursor: Cursor? = contentUri?.let { context.contentResolver.query(it, proj, null, null, null) }
+        val cursor: Cursor? =
+            contentUri?.let { context.contentResolver.query(it, proj, null, null, null) }
         if (cursor?.moveToFirst() == true) {
             val columnIndex: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             res = cursor.getString(columnIndex)

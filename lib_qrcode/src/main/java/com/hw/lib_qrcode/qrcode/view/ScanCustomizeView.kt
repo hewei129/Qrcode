@@ -54,10 +54,10 @@ class ScanCustomizeView : BaseScanView {
         this.scanCodeModel = scanCodeModel
         scanLine = BitmapFactory.decodeResource(
             resources,
-            scanCodeModel.getScanBitmapId()
+            scanCodeModel.scanBitmapId
         )
         bitmapHigh = if (scanLine == null) 0 else scanLine!!.height
-        sRect = scanCodeModel.getScanRect()
+        sRect = scanCodeModel.scanRect
         postInvalidate()
     }
 
@@ -76,10 +76,10 @@ class ScanCustomizeView : BaseScanView {
                 sRect!!.top.toFloat()
             ), dp2px(context, sRect!!.right.toFloat())] =
                 dp2px(context, sRect!!.bottom.toFloat())
-            if (scanCodeModel?.isShowFrame() == true) {
+            if (scanCodeModel?.isShowFrame == true) {
                 drawFrameBounds(canvas, scanRect)
             }
-            if (scanCodeModel?.isShowShadow() == true) {
+            if (scanCodeModel?.isShowShadow == true) {
                 drawShadow(canvas, scanRect)
             }
             if (scanLine != null) {
@@ -104,12 +104,12 @@ class ScanCustomizeView : BaseScanView {
     ) {
         paint!!.color = ContextCompat.getColor(
             context,
-            if (scanCodeModel?.getShaowColor() === 0)
-                R.color.black_tran30 else scanCodeModel!!.getShaowColor()
+            if (scanCodeModel?.shaowColor === 0)
+                R.color.black_tran30 else scanCodeModel!!.shaowColor
         )
         val frameWith: Int = dp2px(
             context,
-            if (scanCodeModel!!.getFrameWith() === 0) DEFALUTE_WITH.toFloat() else scanCodeModel!!.getFrameWith()
+            if (scanCodeModel!!.frameWith === 0) DEFALUTE_WITH.toFloat() else scanCodeModel!!.frameWith
                 .toFloat()
         )
         canvas.drawRect(0f, 0f, width.toFloat(), frame!!.top - frameWith.toFloat(), paint!!)
@@ -145,22 +145,22 @@ class ScanCustomizeView : BaseScanView {
         canvas: Canvas,
         frame: Rect?
     ) {
-        if(scanCodeModel == null) return
+        if (scanCodeModel == null) return
         paint!!.color = ContextCompat.getColor(
             context,
-            if (scanCodeModel!!.getFrameColor() === 0) R.color.qqscan else scanCodeModel!!.getFrameColor()
+            if (scanCodeModel!!.frameColor === 0) R.color.qqscan else scanCodeModel!!.frameColor
         )
         val corWidth: Int = dp2px(
             context,
-            if (scanCodeModel!!.getFrameWith() === 0) DEFALUTE_WITH.toFloat() else scanCodeModel!!.getFrameWith()
+            if (scanCodeModel!!.frameWith === 0) DEFALUTE_WITH.toFloat() else scanCodeModel!!.frameWith
                 .toFloat()
         )
         val corLength: Int = dp2px(
             context,
-            if (scanCodeModel!!.getFrameLenth() === 0) DEFAULTE_LENGTH.toFloat() else scanCodeModel!!.getFrameLenth()
+            if (scanCodeModel!!.frameLenth === 0) DEFAULTE_LENGTH.toFloat() else scanCodeModel!!.frameLenth
                 .toFloat()
         )
-        val radius: Int = dp2px(context, scanCodeModel!!.getFrameRaduis().toFloat())
+        val radius: Int = dp2px(context, scanCodeModel!!.frameRaduis.toFloat())
 
         // 左上角
         canvas.drawRoundRect(

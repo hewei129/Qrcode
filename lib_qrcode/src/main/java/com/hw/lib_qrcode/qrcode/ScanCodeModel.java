@@ -9,6 +9,17 @@ import com.hw.lib_qrcode.qrcode.bean.ScanRect;
 
 public class ScanCodeModel implements Parcelable {
 
+    public static final Creator<ScanCodeModel> CREATOR = new Creator<ScanCodeModel>() {
+        @Override
+        public ScanCodeModel createFromParcel(Parcel in) {
+            return new ScanCodeModel(in);
+        }
+
+        @Override
+        public ScanCodeModel[] newArray(int size) {
+            return new ScanCodeModel[size];
+        }
+    };
     protected Activity mActivity;
     private int style;
     private boolean isPlayAudio;
@@ -23,10 +34,10 @@ public class ScanCodeModel implements Parcelable {
     private int frameLenth;
     private int frameRaduis;
 
-    public ScanCodeModel(Activity mActivity){
+
+    public ScanCodeModel(Activity mActivity) {
         this.mActivity = mActivity;
     }
-
 
     protected ScanCodeModel(Parcel in) {
         style = in.readInt();
@@ -63,18 +74,6 @@ public class ScanCodeModel implements Parcelable {
     public int describeContents() {
         return 0;
     }
-
-    public static final Creator<ScanCodeModel> CREATOR = new Creator<ScanCodeModel>() {
-        @Override
-        public ScanCodeModel createFromParcel(Parcel in) {
-            return new ScanCodeModel(in);
-        }
-
-        @Override
-        public ScanCodeModel[] newArray(int size) {
-            return new ScanCodeModel[size];
-        }
-    };
 
     public int getStyle() {
         return style;
@@ -185,7 +184,7 @@ public class ScanCodeModel implements Parcelable {
         return this;
     }
 
-    public ScanCodeConfig buidler(){
+    public ScanCodeConfig buidler() {
         return new ScanCodeConfig(this);
     }
 }

@@ -12,9 +12,13 @@ import com.hw.lib_qrcode.qrcode.utils.AudioUtil
 import java.nio.ByteBuffer
 import java.util.*
 
-class ScanCodeAnalyzer(mActivity: Activity, val scanCodeModel: ScanCodeModel, val onScancodeListenner: OnScancodeListenner) : ImageAnalysis.Analyzer  {
+class ScanCodeAnalyzer(
+    mActivity: Activity,
+    val scanCodeModel: ScanCodeModel,
+    val onScancodeListenner: OnScancodeListenner
+) : ImageAnalysis.Analyzer {
 
-    private val audioUtil : AudioUtil = AudioUtil(mActivity, scanCodeModel.audioId)
+    private val audioUtil: AudioUtil = AudioUtil(mActivity, scanCodeModel.audioId)
     private val reader: MultiFormatReader = initReader()
 
     /**
@@ -53,11 +57,12 @@ class ScanCodeAnalyzer(mActivity: Activity, val scanCodeModel: ScanCodeModel, va
                 rotationData[j] = data[k]
             }
         }
-        val source = PlanarYUVLuminanceSource(rotationData, height, width, 0, 0, height, width, false)
+        val source =
+            PlanarYUVLuminanceSource(rotationData, height, width, 0, 0, height, width, false)
         val bitmap = BinaryBitmap(HybridBinarizer(source))
         try {
             val result = reader.decode(bitmap)
-            if (scanCodeModel.isPlayAudio)   audioUtil.playBeepSoundAndVibrate()
+            if (scanCodeModel.isPlayAudio) audioUtil.playBeepSoundAndVibrate()
             onScancodeListenner.onBackCode(result.text)
         } catch (e: Exception) {
             image.close()

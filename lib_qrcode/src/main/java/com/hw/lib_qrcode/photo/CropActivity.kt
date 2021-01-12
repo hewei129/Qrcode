@@ -10,13 +10,13 @@ import android.view.View
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import com.hw.lib_qrcode.R
+import com.hw.lib_qrcode.qrcode.BaseScanActivity
 import com.kevin.crop.UCrop
 import com.kevin.crop.util.BitmapLoadUtils
 import com.kevin.crop.view.CropImageView
 import com.kevin.crop.view.GestureCropImageView
 import com.kevin.crop.view.OverlayView
 import com.kevin.crop.view.TransformImageView.TransformImageListener
-import com.yxing.BaseScanActivity
 import kotlinx.android.synthetic.main.activity_crop.*
 import java.io.OutputStream
 
@@ -138,7 +138,7 @@ class CropActivity : BaseScanActivity() {
             fadeInAnimation.setAnimationListener(object :
                 Animation.AnimationListener {
                 override fun onAnimationStart(animation: Animation) {
-                    weixin_act_ucrop.setVisibility(View.VISIBLE)
+                    weixin_act_ucrop.visibility = View.VISIBLE
                     mGestureCropImageView!!.setImageToWrapCropBounds()
                 }
 
