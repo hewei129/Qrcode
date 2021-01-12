@@ -59,8 +59,8 @@ Step 4. 生成二维码:
     createQRcodeWithLogo(text, logo)
     createQRcodeWithLogo(text, size, logo, logoWith, logoHigh, logoRaduisX, logoRaduisY)
     
-    
-    Step 5. 可调用自定义camera：
+   
+Step 5. 可调用自定义camera：
     
         例如：自定义activity 继承CameraActivity，重写layout
     
