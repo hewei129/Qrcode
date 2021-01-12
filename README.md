@@ -15,8 +15,9 @@ Step 2. Add the dependency
     dependencies {
             implementation 'com.github.hewei129:Qrcode:1.0.2'
     }
-Step 3. 
-    二维码扫码：
+    
+Step 3. 二维码扫码：
+
      ScanCodeConfig.create(activity) //设置扫码页样式 ScanStyle.NONE：无  ScanStyle.QQ ：仿QQ样式   ScanStyle.WECHAT ：仿微信样式
                                             .setStyle(ScanStyle.CUSTOMIZE)//扫码成功是否播放音效  true ： 播放   false ： 不播放
                                             .setPlayAudio(true)//设置音效音频
@@ -36,7 +37,8 @@ Step 3.
                                             //MyScanActivity自定义activity ,可继承至ScanCodeActivity重写layout
 
 Step 4. 生成二维码:
-       /**
+
+    /**
      * 生成二维码
      *
      * @param text 需要生成二维码的文字、网址等
@@ -59,6 +61,7 @@ Step 4. 生成二维码:
     
     
     Step 5. 可调用自定义camera：
+    
         例如：自定义activity 继承CameraActivity，重写layout
     
 
