@@ -2,20 +2,22 @@ package com.hw.qrcodedemo
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color.green
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.hw.lib_qrcode.qrcode.ScanCodeConfig
-import com.hw.lib_qrcode.qrcode.bean.ScanRect
 import com.hw.lib_qrcode.qrcode.def.ScanStyle
 import kotlinx.android.synthetic.main.activity_main.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+//        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
+//        Log.e("David", "time="+sdf.format(Date()))
         tv_sao.setOnClickListener {
             ScanCodeConfig.create(this@MainActivity) //设置扫码页样式 ScanStyle.NONE：无  ScanStyle.QQ ：仿QQ样式   ScanStyle.WECHAT ：仿微信样式
                 .setStyle(ScanStyle.QQ)//扫码成功是否播放音效  true ： 播放   false ： 不播放
