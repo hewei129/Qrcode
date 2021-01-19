@@ -114,10 +114,10 @@ private fun getFilePathForN(
 @Throws(Exception::class)
 fun getPathByUri(context: Context, uri: Uri): String? {
     val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
-    val isN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
-    if (isN) {
-        return getFilePathForN(context, uri)
-    }
+//    val isN = Build.VERSION.SDK_INT >= Build.VERSION_CODES.N
+//    if (isN) {
+//        return getFilePathForN(context, uri)
+//    }
 
     // DocumentProvider
     if (isKitKat && DocumentsContract.isDocumentUri(context, uri)) {
