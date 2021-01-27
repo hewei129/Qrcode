@@ -1,5 +1,8 @@
 # Qrcode
-集成封装了二维码扫码、生成二维码等，运用了camerax库，可自定义扫码页面；还封装了自定义camerax拍照功能等等
+***集成封装了二维码扫码、生成二维码等，运用了camerax库，可自定义扫码页面；还封装了自定义camerax拍照功能等等
+
+***新增camera字节数组流直接传入识别二维码逻辑的功能
+
 
 使用说明 
 Step 1. Add it in your root build.gradle at the end of repositories:
@@ -64,5 +67,20 @@ Step 5. 可调用自定义camera：
     
         例如：自定义activity 继承CameraActivity，重写layout
     
+
+**
+val qrScanUtil = QRCodeScanUtil(activity)
+                qrScanUtil.setPlayAudio(true) //设置扫描完成是否播放音效
+                qrScanUtil.setAudioId(R.raw.beep) //传入自定义的音效文件
+                qrScanUtil.decodeQrcode(data, //camera原声数据流YUV420格式
+                                        left,
+                                        top, 
+                                        width, //camera的preivew 宽度
+                                        height, //camera的preivew 高度
+                                        rowWidth，//扫描框宽度 全流扫描可设置与width一致
+                                        rowHeight, //扫描框高度 全流扫描可设置与height一致
+                                        callback //成功回调函数
+                                        )
+
 
 
