@@ -14,25 +14,25 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 //        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
 //        Log.e("David", "time="+sdf.format(Date()))
-        val qrUtil = QRScanUtil()
-        qrUtil.setCallBack(scanCallBack)
-        tv_sao.setOnClickListener {
-
-            qrUtil.scanQRCode(this, QRScanUtil.ScanToolMode.CZXING_MODE)
-
-        }
+//        val qrUtil = QRScanUtil()
+//        qrUtil.setCallBack(scanCallBack)
+//        tv_sao.setOnClickListener {
+//
+//            qrUtil.scanQRCode(this, QRScanUtil.ScanToolMode.CZXING_MODE)
+//
+//        }
     }
 
-    // 扫描结果回调
-    private val scanCallBack: QRScanUtil.QRScanCallBack = object : QRScanUtil.QRScanCallBack {
-        override fun onFail() {
-        }
-
-        override fun onSuccess(result: String?) {
-            Toast.makeText(this@MainActivity, "result=$result", Toast.LENGTH_LONG).show()
-        }
-
-    }
+//    // 扫描结果回调
+//    private val scanCallBack: QRScanUtil.QRScanCallBack = object : QRScanUtil.QRScanCallBack {
+//        override fun onFail() {
+//        }
+//
+//        override fun onSuccess(result: String?) {
+//            Toast.makeText(this@MainActivity, "result=$result", Toast.LENGTH_LONG).show()
+//        }
+//
+//    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

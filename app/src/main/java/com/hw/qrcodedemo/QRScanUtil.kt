@@ -58,6 +58,7 @@ class QRScanUtil {
             ScanToolMode.CAMERA_MODE -> {
 //                val qrScanUtil = QRCodeScanUtil(activity)
 //                qrScanUtil.setPlayAudio(true)
+//                qrScanUtil.setAudioId(R.raw.beep)
 //                qrScanUtil.decodeQrcode()
 
             }
