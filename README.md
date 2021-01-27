@@ -66,10 +66,12 @@ Step 4. 生成二维码:
 Step 5. 可调用自定义camera：
     
         例如：自定义activity 继承CameraActivity，重写layout
+        
     
+Step 6. 可调用传入camera字节流直接识别二维码信息：
 
-**
-val qrScanUtil = QRCodeScanUtil(activity)
+
+    val qrScanUtil = QRCodeScanUtil(activity)
                 qrScanUtil.setPlayAudio(true) //设置扫描完成是否播放音效
                 qrScanUtil.setAudioId(R.raw.beep) //传入自定义的音效文件
                 qrScanUtil.decodeQrcode(data, //camera原声数据流YUV420格式
