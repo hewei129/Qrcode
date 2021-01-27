@@ -13,9 +13,11 @@ import com.hw.lib_qrcode.scan.rotateYUV420Degree90
 
 class ProcessRunnable(dispatcher: Dispatcher?,
                       frameData: FrameData?,
+                      isPortrait: Boolean,
                       callback: Callback?) : Runnable{
     private var dispatcher: Dispatcher? = null
     private var frameData: FrameData? = null
+    private var isPortrait = true
     private var mBarcodeProcessor: BarcodeProcessor? = null
     private var mDecodeCallback: Callback? = null
 
@@ -43,17 +45,32 @@ class ProcessRunnable(dispatcher: Dispatcher?,
                     }
                 }
 //            val start = System.currentTimeMillis()
-                val new_data: ByteArray? = rotateYUV420Degree90(it.data, it.width, it.height)
-                val result = mBarcodeProcessor!!.process(
-                    new_data,
-                    it.left,
-                    it.top,
-                    it.height,
-                    it.width
-                )
-                if (result != null && mDecodeCallback != null) {
-                    mDecodeCallback!!.onDecodeComplete(result)
+
+                if(isPortrait) {
+                    val new_data: ByteArray? = rotateYUV420Degree90(it.data, it.width, it.height)
+                    val result = mBarcodeProcessor!!.process(
+                        new_data,
+                        it.left,
+                        it.top,
+                        it.height,
+                        it.width
+                    )
+                    if (result != null && mDecodeCallback != null) {
+                        mDecodeCallback!!.onDecodeComplete(result)
+                    }
+                }else{
+                    val result = mBarcodeProcessor!!.process(
+                        it.data,
+                        it.left,
+                        it.top,
+                        it.width,
+                        it.height
+                    )
+                    if (result != null && mDecodeCallback != null) {
+                        mDecodeCallback!!.onDecodeComplete(result)
+                    }
                 }
+
 
             }
 

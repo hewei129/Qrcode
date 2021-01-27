@@ -19,9 +19,11 @@ class QRCodeScanUtil(activity: Activity) {
     private var audioId = R.raw.beep
     private var audioUtil: AudioUtil? = null
     private var dispatcher: Dispatcher? = null
+    private var isPortrait = true
     init {
         this.audioUtil = AudioUtil(activity, audioId)
         this.dispatcher = Dispatcher()
+        isPortrait = isPortrait(activity)
     }
 
 
@@ -60,7 +62,8 @@ class QRCodeScanUtil(activity: Activity) {
                 width,
                 height,
                 width,
-                width,
+                height,
+                isPortrait,
                 object : Callback {
                     override fun onDecodeComplete(result: Result?) {
                         if (isPlayAudio) audioUtil?.playBeepSoundAndVibrate()

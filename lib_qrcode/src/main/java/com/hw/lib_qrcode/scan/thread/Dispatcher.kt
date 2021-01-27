@@ -34,8 +34,8 @@ class Dispatcher {
         )
     }
 
-    fun newRunnable(frameData: FrameData?, callback: Callback?): ProcessRunnable? {
-        return ProcessRunnable(this, frameData, callback)
+    fun newRunnable(frameData: FrameData?,  isPortrait: Boolean, callback: Callback?): ProcessRunnable? {
+        return ProcessRunnable(this, frameData, isPortrait, callback)
     }
 
     fun newRunnable(
@@ -46,9 +46,10 @@ class Dispatcher {
         height: Int,
         rowWidth: Int,
         rowHeight: Int,
+        isPortrait: Boolean,
         callback: Callback?
     ): ProcessRunnable? {
-        return newRunnable(FrameData(data, left, top, width, height, rowWidth, rowHeight), callback)
+        return newRunnable(FrameData(data, left, top, width, height, rowWidth, rowHeight), isPortrait, callback)
     }
 
     @Synchronized
